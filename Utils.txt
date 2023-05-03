@@ -1,0 +1,22 @@
+public class Utils {
+    
+    public static Boolean validaCPF(String cpf) {
+        cpf = cpf.replaceAll('[^0-9\\s+]', '');
+        if(cpf.length() == 11) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public static Boolean validaCNPJ(String cnpj) {
+        cnpj = cnpj.replaceAll('[^0-9\\s+]', '');
+        if(cnpj.length() == 14) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    } 
+}

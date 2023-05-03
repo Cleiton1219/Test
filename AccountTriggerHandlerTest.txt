@@ -1,0 +1,229 @@
+@istest
+private class AccountTriggerHandlerTest {
+        
+    //Inserção/Atualização com multiplos registros
+    @isTest
+    private static void partnerAccountValidCPF() {
+        Test.startTest();
+        try {
+            List<Account> lstAccount = new List<Account>(); 
+            
+            Account acc1 = new Account();
+            acc1.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Parceiro').getRecordTypeId();
+            acc1.Name = 'Test 01 - Valid CPF';
+            acc1.Type = 'CPF';
+            acc1.AccountNumber = '198.060.830-08';
+            lstAccount.add(acc1);
+            
+            Account acc2 = new Account();
+            acc2.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Parceiro').getRecordTypeId();
+            acc2.Name = 'Test 02 - Valid CPF';
+            acc2.Type = 'CPF';
+            acc2.AccountNumber = '833.559.030-35';
+            lstAccount.add(acc2);
+            
+            insert lstAccount;
+            System.Assert(lstAccount.size() > 0);
+            
+            //Atualiza itens da lista
+            lstAccount[0].AccountNumber = '034.431.860-50';
+            lstAccount[1].AccountNumber = '469.347.000-74';
+            update lstAccount;
+            System.Assert(lstAccount[0].AccountNumber == '034.431.860-50');
+            System.Assert(lstAccount[1].AccountNumber == '469.347.000-74');
+        }
+        catch(Exception e) {
+            Boolean expectedExceptionThrown =  e.getMessage().contains('Número do cliente é inválido.') ? true : false;
+            System.AssertEquals(expectedExceptionThrown, true);
+        }
+        Test.stopTest();
+    }
+    
+    //Inserção/Atualização com multiplos registros
+    @isTest
+    private static void partnerAccountValidCNPJ() {
+        Test.startTest();
+        try {
+            
+            List<Account> lstAccount = new List<Account>(); 
+            
+            Account acc1 = new Account();
+            acc1.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Parceiro').getRecordTypeId();
+            acc1.Name = 'Test 01 - Valid CNPJ';
+            acc1.Type = 'CNPJ';
+            acc1.AccountNumber = '52.628.214/0001-00';
+            lstAccount.add(acc1);
+            
+            Account acc2 = new Account();
+            acc2.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Parceiro').getRecordTypeId();
+            acc2.Name = 'Test 02- Valid CNPJ';
+            acc2.Type = 'CNPJ';
+            acc2.AccountNumber = '56.929.179/0001-10';
+            lstAccount.add(acc2);
+            
+            insert lstAccount;
+            System.Assert(lstAccount.size() > 0);
+            
+            //Atualiza itens da lista
+            lstAccount[0].AccountNumber = '21.170.813/0001-08';
+            lstAccount[1].AccountNumber = '73.273.049/0001-91';
+            update lstAccount;
+            System.Assert(lstAccount[0].AccountNumber == '21.170.813/0001-08');
+            System.Assert(lstAccount[1].AccountNumber == '73.273.049/0001-91');
+        }
+        catch(Exception e) {
+            Boolean expectedExceptionThrown =  e.getMessage().contains('Número do cliente é inválido.') ? true : false;
+            System.AssertEquals(expectedExceptionThrown, true);
+        }
+        Test.stopTest();
+    }
+  
+    //Inserção/Atualização com multiplos registros
+    @isTest
+    private static void finalConsumerAccountValidCPF() {
+        Test.startTest();
+        try {
+            List<Account> lstAccount = new List<Account>(); 
+            
+            Account acc1 = new Account();
+            acc1.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Consumidor final').getRecordTypeId();
+            acc1.Name = 'Test 01 - Valid CPF';
+            acc1.Type = 'CPF';
+            acc1.AccountNumber = '198.060.830-08';
+            lstAccount.add(acc1);
+            
+            Account acc2 = new Account();
+            acc2.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Consumidor final').getRecordTypeId();
+            acc2.Name = 'Test 02 - Valid CPF';
+            acc2.Type = 'CPF';
+            acc2.AccountNumber = '833.559.030-35';
+            lstAccount.add(acc2);
+            
+            insert lstAccount;
+            System.Assert(lstAccount.size() > 0);
+            
+            //Atualiza itens da lista
+            lstAccount[0].AccountNumber = '034.431.860-50';
+            lstAccount[1].AccountNumber = '469.347.000-74';
+            update lstAccount;
+            System.Assert(lstAccount[0].AccountNumber == '034.431.860-50');
+            System.Assert(lstAccount[1].AccountNumber == '469.347.000-74');
+        }
+        catch(Exception e) {
+            Boolean expectedExceptionThrown =  e.getMessage().contains('Número do cliente é inválido.') ? true : false;
+            System.AssertEquals(expectedExceptionThrown, true);
+        }
+        Test.stopTest();
+    }
+    
+    //Inserção/Atualização com multiplos registros
+    @isTest
+    private static void finalConsumerAccountValidCNPJ() {
+        Test.startTest();
+        try {
+            List<Account> lstAccount = new List<Account>(); 
+            
+            Account acc1 = new Account();
+            acc1.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Consumidor final').getRecordTypeId();
+            acc1.Name = 'Test 01 - Valid CNPJ';
+            acc1.Type = 'CNPJ';
+            acc1.AccountNumber = '52.628.214/0001-00';
+            lstAccount.add(acc1);
+            
+            Account acc2 = new Account();
+            acc2.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Consumidor final').getRecordTypeId();
+            acc2.Name = 'Test 02 - Valid CNPJ';
+            acc2.Type = 'CNPJ';
+            acc2.AccountNumber = '56.929.179/0001-10';
+            lstAccount.add(acc2);
+            
+            insert lstAccount;
+            System.Assert(lstAccount.size() > 0);
+            
+            //Atualiza itens da lista
+            lstAccount[0].AccountNumber = '21.170.813/0001-08';
+            lstAccount[1].AccountNumber = '73.273.049/0001-91';
+            update lstAccount;
+            System.Assert(lstAccount[0].AccountNumber == '21.170.813/0001-08');
+            System.Assert(lstAccount[1].AccountNumber == '73.273.049/0001-91');
+        }
+        catch(Exception e) {
+            Boolean expectedExceptionThrown =  e.getMessage().contains('Número do cliente é inválido.') ? true : false;
+            System.AssertEquals(expectedExceptionThrown, true);
+        }
+        Test.stopTest();
+    }
+    
+    
+    @isTest
+    private static void partnerAccountInvalidCPF() {
+		Test.startTest();
+        try {
+            Account acc = new Account();
+            acc.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Parceiro').getRecordTypeId();
+            acc.Name = 'Test - Invalid CPF';
+            acc.Type = 'CPF';
+            acc.AccountNumber = '123';
+            insert acc;
+        }
+        catch(Exception e) {
+            Boolean expectedExceptionThrown =  e.getMessage().contains('Número do cliente é inválido.') ? true : false;
+        	System.AssertEquals(expectedExceptionThrown, true);
+        }
+        Test.stopTest();
+    }
+          
+    @isTest
+    private static void partnerAccountInvalidCNPJ() {
+		Test.startTest();
+        try {
+            Account acc = new Account();
+            acc.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Parceiro').getRecordTypeId();
+            acc.Name = 'Test - Invalid CNPJ';
+            acc.Type = 'CNPJ';
+            acc.AccountNumber = '123';
+            insert acc;
+        }
+        catch(Exception e) {
+            Boolean expectedExceptionThrown =  e.getMessage().contains('Número do cliente é inválido.') ? true : false;
+        	System.AssertEquals(expectedExceptionThrown, true);
+        }
+        Test.stopTest();
+    } 
+     
+    @isTest
+    private static void finalConsumerAccountInvalidCPF() {
+		Test.startTest();
+        try {
+            Account acc = new Account();
+            acc.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Consumidor final').getRecordTypeId();
+            acc.Name = 'Test - Invalid CPF';
+            acc.Type = 'CPF';
+            acc.AccountNumber = '123';
+            insert acc;
+        }
+        catch(Exception e) {
+            Boolean expectedExceptionThrown =  e.getMessage().contains('Número do cliente é inválido.') ? true : false;
+        	System.AssertEquals(expectedExceptionThrown, true);
+        }
+        Test.stopTest();
+    }
+     
+    @isTest
+    private static void finalConsumerAccountInvalidCNPJ() {
+		Test.startTest();
+        try {
+            Account acc = new Account();
+            acc.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Consumidor final').getRecordTypeId();
+            acc.Name = 'Test - Invalid CNPJ';
+            acc.Type = 'CNPJ';
+            acc.AccountNumber = '123';
+            insert acc;
+        }
+        catch(Exception e) {
+            Boolean expectedExceptionThrown =  e.getMessage().contains('Número do cliente é inválido.') ? true : false;
+        	System.AssertEquals(expectedExceptionThrown, true);
+        }
+        Test.stopTest();
+    }
+}

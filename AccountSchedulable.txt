@@ -1,0 +1,22 @@
+global class AccountSchedulable implements Schedulable {
+
+    public static String SCHEDULE_NAME = 'AccountSchedulable';
+    
+    global void execute(SchedulableContext ctx) {
+        AccountBatch accBatch = new AccountBatch();                            
+        Database.executeBatch(accBatch); 
+    }
+    
+    public static void start() {
+        //Seconds Minutes Hours Day_of_month Month Day_of_week Optional_year
+        AccountSchedulable schedule = new AccountSchedulable();
+        String sch = '0 0 0/6 ? * MON-FRI';
+        System.schedule (SCHEDULE_NAME, sch, schedule);
+    }
+    
+    public static void abort() {
+        for (CronTrigger  cron : [SELECT Id FROM CronTrigger WHERE CronJobDetail.Name LIKE : SCHEDULE_NAME]) {
+            System.abortJob(cron.Id);
+        }
+    }
+}

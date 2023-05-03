@@ -1,0 +1,77 @@
+public class AccountTriggerHandler extends TriggerHandler {
+	
+    private static final String className = 'AccountTriggerHandler';
+    
+    private List<Account> lstNew;
+
+    
+    public AccountTriggerHandler() {
+        this.lstNew = (List<Account>) Trigger.new;
+    }
+    
+    public override void beforeInsert() {
+        validaAccountNumber(this.lstNew);
+    }
+    
+    public override void afterInsert() {
+        verificaTipoDeRegistro(this.lstNew);
+    }
+    
+    public override void beforeUpdate() {
+        validaAccountNumber(this.lstNew);
+    }
+    
+    public void validaAccountNumber(List<Account> lstNew) {
+        for(Account acc : lstNew) {
+            if(acc.Type == 'CPF') {
+                Boolean cpfValido = Utils.validaCPF(acc.AccountNumber);
+                if(!cpfValido) {
+                    acc.addError('Número do cliente é inválido.');
+                }
+            }
+            else if(acc.Type == 'CNPJ') {
+                Boolean cnpjValido = Utils.validaCNPJ(acc.AccountNumber);
+                if(!cnpjValido) {
+                    acc.addError('Número do cliente é inválido.');
+                }       
+            }
+        }
+    }
+    
+    public void verificaTipoDeRegistro(List<Account> lstNew) {
+        
+        Id parceiroId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Parceiro').getRecordTypeId();
+        
+        Id consumidorFinalId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Consumidor final').getRecordTypeId();
+            
+        List<Opportunity> lstOpportunity = new List<Opportunity>();
+        List<Task> lstTask = new List<task>();
+        for(Account acc : lstNew) {
+            if(acc.RecordTypeId == parceiroId) {
+                Opportunity opp = new Opportunity();
+                opp.AccountId = acc.Id;
+                opp.Name = acc.Name + ' - opp Parceiro';
+                opp.CloseDate = Date.today() + 30;
+                opp.StageName = 'Qualification';
+                lstOpportunity.add(opp);
+            }
+            
+            
+            else if(acc.RecordTypeId == consumidorFinalId) {
+                Task task = new Task();
+                task.Subject = 'Consumidor Final';
+                task.WhatId = acc.Id;
+                task.Status = 'Not Started';
+                task.Priority = 'Normal';
+                lstTask.add(task);
+            }
+        }
+        
+        if(!lstOpportunity.isEmpty()) {
+            insert lstOpportunity;
+        }
+        if(!lstTask.isEmpty()) {
+            insert lstTask;
+        }
+    }
+}

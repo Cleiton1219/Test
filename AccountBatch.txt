@@ -1,0 +1,55 @@
+global class AccountBatch implements Database.Batchable<sObject> {
+    
+    global Iterable<sObject> start(Database.BatchableContext BC){
+        //ActivityDate ou CreatedDate
+        return Database.getQueryLocator(
+            'SELECT ID, Name, Type, AccountNumber, Inativa__c, ' +
+            '(SELECT ID, Subject, WhatId, Status, Priority, CreatedDate FROM Tasks WHERE CreatedDate = LAST_N_DAYS:90), ' +
+            '(SELECT ID, AccountId, Name, StageName, CloseDate FROM Opportunities WHERE (StageName = \'Closed Won\' AND CloseDate = LAST_N_DAYS:120) OR StageName = \'Negotiation/Review\') ' +
+            ' FROM Account WHERE Inativa__c = false');
+    }
+    
+    global void execute(Database.BatchableContext bc, List<Account> lstAccount) { 
+        
+        
+        Set<Id> lstAccountIdsActive = new Set<Id>();
+        
+        system.debug('ANTES lstAccountIdsActive::: ' + lstAccountIdsActive);
+        system.debug('ANTES lstAccountIdsActive SIZE::: ' + lstAccountIdsActive.size());
+        
+        for(Account acc : lstAccount) {
+            system.debug('account:::'+acc);
+            
+            for (Task task : acc.tasks) {
+                
+                lstAccountIdsActive.add(acc.Id);
+                system.debug('task:::'+task);
+                break;
+            }
+            
+            for (Opportunity opp : acc.opportunities) {
+                
+                lstAccountIdsActive.add(acc.Id);
+                system.debug('opp:::'+opp);
+                break;
+            }
+        }
+        
+        system.debug('DEPOIS lstAccountIdsActive::: ' + lstAccountIdsActive);
+        system.debug('DEPOIS lstAccountIdsActive SIZE::: ' + lstAccountIdsActive.size());
+        
+        for (Account acc : lstAccount) {
+            
+            if(!lstAccountIdsActive.contains(acc.Id)) {
+                acc.Inativa__c = true;
+                system.debug('accToInactive::: ' + acc);
+            }
+        }
+        
+        update lstAccount;
+        
+    }    
+    
+    global void finish(Database.BatchableContext bc) {}
+
+}
